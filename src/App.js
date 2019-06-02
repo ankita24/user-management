@@ -1,25 +1,23 @@
+import { createBrowserHistory } from 'history';
 import React from 'react';
-import logo from './logo.svg';
+import { Provider } from 'react-redux';
+import { Route, Router, Switch } from 'react-router-dom';
+import 'semantic-ui-css/semantic.min.css';
 import './App.css';
+import UserDetails from './component/UserDetails';
+import UserPage from './component/UserPage';
+import createStore from './store';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Provider store={createStore()}>
+      <Router history={createBrowserHistory()}>
+        <Switch>
+          <Route exact path="/" component={UserPage} />
+          <Route path="/user/:id" component={UserDetails} />
+        </Switch>
+      </Router>
+    </Provider>
   );
 }
 
