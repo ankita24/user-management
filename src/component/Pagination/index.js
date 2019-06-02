@@ -5,18 +5,31 @@ import { setSelectedUsers } from '../../actions/user';
 
 const limit = 5;
 class Pagination extends React.Component {
+  handleChange = offset => {
+    this.props.setSelectedUsers(offset).then(() => {
+      this.props.handleChange();
+    });
+  };
   render() {
     const { offset, users } = this.props;
     const final = users.length / limit;
 
     let items;
     if (offset < 3) {
-      items = [...new Set([1, 2, 3, '...', final])];
+      items = ['Prev', 1, 2, 3, '...', final, 'Next'];
     } else if (offset > final - 2) {
-      items = [...new Set([1, '...', final - 2, final - 1, final])];
+      items = ['Prev', 1, '...', final - 2, final - 1, final, 'Next'];
     } else {
       items = [
-        ...new Set([1, '...', offset - 1, offset, offset + 1, '... ', final])
+        'Prev',
+        1,
+        '...',
+        offset - 1,
+        offset,
+        offset + 1,
+        '... ',
+        final,
+        'Next'
       ];
     }
 
@@ -25,9 +38,14 @@ class Pagination extends React.Component {
         {items.map(item => (
           <Menu.Item
             key={item}
+            active={offset === item}
             onClick={() => {
               if (typeof item === 'number') {
-                this.props.setSelectedUsers(item);
+                this.handleChange(item);
+              } else if (item === 'Prev' && offset > 1) {
+                this.handleChange(offset - 1);
+              } else if (item === 'Next' && offset < final) {
+                this.handleChange(offset + 1);
               }
             }}
           >

@@ -37,10 +37,12 @@ export const setSelectedUsers = (offset = 1) => {
 
     const payload = list.slice((offset - 1) * limit, offset * limit);
 
-    dispatch({
-      type: SET_SELECTED_USERS,
-      payload,
-      offset
-    });
+    return Promise.resolve(
+      dispatch({
+        type: SET_SELECTED_USERS,
+        payload,
+        offset
+      })
+    );
   };
 };
